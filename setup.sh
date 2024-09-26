@@ -9,7 +9,7 @@ if [ "$EUID" -ne 0 ]; then
     exit
 fi
 
-printf "\033[94m{ The file has been created and is in the repository https://github.com/VarionDrakon/FreeIPAClientAddUserSudo }\033[0m\n\n" 
+printf "\033[94m{ The file has been created and is in the repository https://github.com/VarionDrakon/FreeIPAAutomaticClientSetup }\033[0m\n\n" 
 
 # Step 1
 printf "[Step 1.0] \033[93mAttempting to update the system\033[0m\n"
