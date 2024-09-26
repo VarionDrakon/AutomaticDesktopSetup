@@ -9,7 +9,7 @@ Insert here the name of the group of users in the IPA domain that should be sudo
 # How to use
 Place the file wherever you want, but preferably in `/root`, then edit the file, namely specify the `user group from the IPA domain that will have sudo rights in the system`... And run the file from sudo. </br>
 </br>
-Oh yeah, and don't forget to write it down: `hostnamectl set-hostname desktop.domain.name` before running the script.
+Oh yeah, and don't forget to write it down: `hostnamectl set-hostname client.domain.name` before running the script.
 
 # About script
 If you want to know more about the script, it works as follows: </br>
