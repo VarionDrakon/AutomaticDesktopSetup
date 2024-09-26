@@ -12,6 +12,18 @@ fi
 printf "\033[94m{ The file has been created and is in the repository https://github.com/VarionDrakon/FreeIPAAutomaticClientSetup }\033[0m\n\n" 
 
 # Step 1
+printf "\033[93mWarning! Did you set the system name before running the script? Enter the command: \033[92m{ hostnamectl set-hostname client.domain.name } \033[0m\n"
+printf "Already done [y/n] " 
+read userResponse
+if [[ $userResponse = "y" || $userResponse = "Y" ]]; then
+    printf "\033[93mAlright, at your own risk.\033[0m\n"
+elif [[ $userResponse = "n" || $userResponse = "N" ]]; then
+    printf "\n\033[91mGo do it!\033[0m\n"
+    exit
+else
+    printf "What?..\n"
+    exit
+fi
 printf "[Step 1.0] \033[93mAttempting to update the system\033[0m\n"
 if apt update -y; then
     printf "[Step 1.!] \033[93mThe system has been updated successfully!\033[0m\n"
