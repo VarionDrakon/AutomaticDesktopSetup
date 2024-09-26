@@ -7,7 +7,7 @@ Insert here the name of the user group in the IPA domain, which should be sudo a
 </br>Otherwise, this is a script for `auto-configuring` the system in the `IPA environment`. I think the script can be easily remade for other package managers, not just `apt`...</br>
 
 # How to use
-Place the file wherever you want, but preferably in `/root`, then edit the file, namely specify the `user group from the IPA domain that will have sudo rights in the system`... And run the file from sudo. </br>
+Place the file wherever you like, but preferably in `/root`, then edit the file, namely specify `user group from the IPA domain that will have sudo rights in the system`, and also change the variable `$nameDefaultUser` to your local user... And run the file from sudo.</br>
 </br>
 Oh yeah, and don't forget to write it down: `hostnamectl set-hostname client.domain.name` before running the script.
 
