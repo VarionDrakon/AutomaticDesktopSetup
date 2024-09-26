@@ -3,6 +3,7 @@ fileNameBash=/usr/local/bin/ipa-client-add-user-sudo.sh
 fileNameService=/etc/systemd/system/ipa-client-add-user-sudo.service
 nameSystemService=ipa-client-add-user-sudo
 nameIPAGroup=ipa_sudo
+nameDefaultUser=sysadm #ATTENTION! Please specify a local user name!
 
 if [ "$EUID" -ne 0 ]; then
     printf "\033[91mPlease run as root!\033[0m\n"
@@ -12,7 +13,7 @@ fi
 printf "\033[94m{ The file has been created and is in the repository https://github.com/VarionDrakon/FreeIPAAutomaticClientSetup }\033[0m\n\n" 
 
 # Step 1
-printf "\033[93mWarning! Did you set the system name before running the script? Enter the command: \033[92m{ hostnamectl set-hostname client.domain.name } \033[0m\n"
+printf "\033[93mWarning! Did you set the system name and \033[92m!edit the variables in the setup.sh file!\033[93m before running the script? Enter the command: \033[92m{ hostnamectl set-hostname client.domain.name } \033[0m\n"
 printf "Already done [y/n] " 
 read userResponse
 if [[ $userResponse = "y" || $userResponse = "Y" ]]; then
@@ -62,8 +63,8 @@ echo "Removed all users from sudo group..."
                 echo "User \$usudo has been deleted."
         done
 
-echo "...And add sysadm in sudo group"
-usermod -aG sudo sysadm
+echo "...And add $nameDefaultUser in sudo group"
+usermod -aG sudo $nameDefaultUser
 echo "Search users started. If users are found in the sudo group, they will be removed."
 
         for user in \$ipa_sudo_users; do
