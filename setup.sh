@@ -14,7 +14,7 @@ printf "\033[94m{ The file has been created and is in the repository https://git
 
 # Step 1
 printf "\033[93mWarning! Did you set the system name and \033[92m!edit the variables in the setup.sh file!\033[93m before running the script? Enter the command: \033[92m{ hostnamectl set-hostname client.domain.name } \033[0m\n"
-printf "Already done [y/n] " 
+printf "Already done? [y/n] " 
 read userResponse
 if [[ $userResponse = "y" || $userResponse = "Y" ]]; then
     printf "\033[93mAlright, at your own risk.\033[0m\n"
