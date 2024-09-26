@@ -18,3 +18,9 @@ If you want to know more about the script, it works as follows: </br>
 - Next, the `service` file itself is created, which will only be executed when the system starts or when manually called. The file is located at the path: `/etc/systemd/system/ipa-client-add-user-sudo.service` The path is also described in a variable: `fileNameService`
 - Then the `service` is `unmasked`, `enabled` and `started`, and after the service is executed or crashed, its `status` is displayed.
 - That's pretty much it...
+## Now the file itself:
+  - First, it determines which users are in the sudo group and $nameIPAGroup.
+  - Then there is a 10 second delay for the request timeout.
+  - Then in the first cycle `ALL` users from the sudo group are removed.
+  - Next, a system user is added to group `sudo` again (In my case, it is sysadm, in your case, it is a local user. Be careful at this point and it is advisable to specify the user yourself in the `$nameDefaultUser` variable!).
+  - Now, finally, in the second cycle, all users found in the `ipa_sudo` group (can be changed) are added to the local `sudo` and the script ends.
