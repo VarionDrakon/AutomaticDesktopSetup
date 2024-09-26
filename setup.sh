@@ -103,6 +103,6 @@ systemctl status $nameSystemService
 
 # Step 4
 printf "[Step 4.!] f everything was successfully, then the system settings is \033[92mcomplete!\033[0m\n"
-printf "[Step 4.1] If you want to reinstall services, then delete the files: \n\033[91m{ rm $fileNameBash }\n{ rm $fileNameService }\033[0m\n[Step 4.1] And startup this file \033[92m{ sudo bash /setup.sh }\033[0m with sudo!\n"
+printf "[Step 4.1] If you want to reinstall services, then delete the files: \n\033[91m{ rm $fileNameBash }\n{ rm $fileNameService }\033[0m\n[Step 4.1] And startup this file \033[92m{ sudo bash /root/setup.sh }\033[0m with sudo!\n"
 # Done
 printf "\n\033[94m{ Varion Drakonov - with best wishes :> }\033[0m\n"
