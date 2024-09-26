@@ -3,7 +3,7 @@ This small script is needed as an addition to configuring FreeIPA on Linux Mint,
 This is necessary so that administrators from the `IPA` domain are visible in the graphical environment, because often shells such as `KDE`, `Cinnamon` and the like display users only from the `/etc/group` group.
 I don't know who will find this useful... But if you need to prepare a clean system for the IPA domain - go ahead :)
 There are 5 variables in the script, you will most likely only need `nameIPAGroup` and `nameDefaultUser`.
-Insert here the name of the group of users in the IPA domain that should be sudo and local to the system. </br>
+Insert here the name of the user group in the IPA domain, which should be sudo and local to the system, and also insert the name of the local user in `nameDefaultUser`</br>
 </br>Otherwise, this is a script for `auto-configuring` the system in the `IPA environment`. I think the script can be easily remade for other package managers, not just `apt`...</br>
 
 # How to use
