@@ -24,3 +24,8 @@ If you want to know more about the script, it works as follows: </br>
   - Then in the first cycle `ALL` users from the sudo group are removed.
   - Next, a system user is added to group `sudo` again (In my case, it is sysadm, in your case, it is a local user. Be careful at this point and it is advisable to specify the user yourself in the `$nameDefaultUser` variable!).
   - Now, finally, in the second cycle, all users found in the `ipa_sudo` group (can be changed) are added to the local `sudo` and the script ends.
+</br>
+</br>
+</br>
+</br>
+P.S.> I'll improve the script later... True... True :>
