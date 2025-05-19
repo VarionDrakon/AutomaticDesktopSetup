@@ -3,7 +3,7 @@
 
 ARCHIVE=$1
 TEMP_DIR=$(mktemp -d)
-INSTALL_PKGS="plasma-nm kde-standard system-config-printer msttcorefonts ttf-mscorefonts-installer tree"
+INSTALL_PKGS="plasma-nm kde-standard system-config-printer msttcorefonts ttf-mscorefonts-installer tree chromium"
 REMOVE_PKGS="nemo cinnamon mintchat kmail akregator rhythmbox celluloid gnome-disk-utility gnome-system-monitor timeshift mintbackup file-roller warpinator xviewer bulky xed"
 
 printf "\033[91mWARNING! This script for only LINUX MINT and desktop environments cinnamon!\033[0m\n"
