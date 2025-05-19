@@ -25,12 +25,12 @@ You need to take the script version from the `Environments` folder, then run the
 If you are asked for `lightDM` or `SDDM`, it is recommended to choose `SDDM`, since it works best with `KDE` and the script is oriented towards this display manager.
 
 # About the script
-~~If you want to know more about the script, it works as follows: </br>
-- First, the system is updated and the necessary packages are installed.
-- Then, a sh file is created, which will be executed by the future `service` and is located at: `/usr/local/bin/ipa-client-add-user-sudo.sh` The path is also described in the variable: `fileNameBash`
-- Next, the `service` file itself is created, which will be executed only at system startup or when manually called. The file is located at: `/etc/systemd/system/ipa-client-add-user-sudo.service` The path is also described in the variable: `fileNameService`
-- Then, the `service` is `unmasked`, `enabled` and `started`, and after the service is executed or fails, its `status` is displayed.
-- That's it...~~
+~~If you want to know more about the script, it works as follows:~~
+- ~~First, the system is updated and the necessary packages are installed.~~
+- ~~Then, a sh file is created, which will be executed by the future `service` and is located at: `/usr/local/bin/ipa-client-add-user-sudo.sh` The path is also described in the variable: `fileNameBash`~~
+- ~~Next, the `service` file itself is created, which will be executed only at system startup or when manually called. The file is located at: `/etc/systemd/system/ipa-client-add-user-sudo.service` The path is also described in the variable: `fileNameService`~~
+- ~~Then, the `service` is `unmasked`, `enabled` and `started`, and after the service is executed or fails, its `status` is displayed.~~
+- ~~That's it...~~
 ## Now the ipa-client-add-user-sudo.sh file itself:
 - First it determines which users are in the `sudo` group and `$nameIPAGroup`.
 - Then there is a 10 second delay for the request timeout.
