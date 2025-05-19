@@ -1,42 +1,40 @@
 # AutomaticDesktopSetup (Home)
-Этот небольшой скрипт для того, чтобы настроить домашний ПК на системе `Linux Mint` на окружение рабочего стола `KDE` с одной из достаточно хороших графических тем. Внутри скрипта есть две переменные - `INSTALL_PKGS` и `REMOVE_PKGS`. Они необходимы для выборки того, что будет установлено в системе, а что будет удаленно. Сильных изменений в систему, кроме графических, не привносит, а только лишь помогает настроить чистую систему с нуля.
+This small script is for setting up a home PC on the Linux Mint system to the KDE desktop environment with one of the good graphical themes. There are two variables inside the script - INSTALL_PKGS and REMOVE_PKGS. They are needed to select what will be installed in the system and what will be removed. It does not make any significant changes to the system, except for graphical ones, but only helps to set up a clean system from scratch.
 
 # AutomaticDesktopSetup (Corporate/Business)
-Всё тоже самое, что и для `Home`, только этот скрипт уже значительнее меняет систему для корпоративного использования `Linux Mint`, а именно устанавливается и настраивается `XRDP (x11vnc)` и `openssh-server, так же устанавливаются пакеты для работы с доменом `FreeIPA`, шрифты `Microsoft Base`, офисный пакет `Libre Office, OnlyOffice (В будущем)`.
-Что изменено?
-* `XRDP` использует `x11vnc` для отображения и работы с локальным сеансом, сам же x11vnc слушает только `localhost`, при попытке подсоединиться и/или отсоединиться будет происходить блокировка всех сессий - за это отвечает скрипт `x11vnc-connection-watcher.sh` и сервис `systemd` `x11vnc-connection-watcher.service`, который каждую секунду проверяет порт 3389 и в случае обнаружения подключения блокирует все сесси и поднимает `x11vnc-temp.service`
-и который отвечает за работу самого `x11vnc`. Аргументы `x11vnc` запрещают двухсторонний буфер и какой-либо иной буфер обмена в целях безопасности (Можно исправить, поправив сервис `x11vnc-temp.service`). Локальный пароль `/etc/vncpasswd` в целом не особо важен, когда сама оболочка `KDE`/`SDDM` защищает сессию.
-* Настроен `OpenSSH` сервер на порту `22522`, у которого отключён доступ по паролю и `root`, то есть, для использования `OpenSSH` сервера необходимо Вам либо установить приватный ключ для системного пользователя `demon.system` (Он же может использоваться, например для `Ansible`), либо изменить конфигурацию на разрешение паролей.
-* Добавлен системный пользователь `demon.system` у которого нет пароля, но и так же нет возможности входа по паролю, так как отключена.
-* Настроен `ipa-client-add-user-sudo.service` с выполенением скрипта `ipa-client-add-user-sudo.sh`, про который можно подробнее почитать в отдельном пункте.
+All the same as for `Home`, only this script significantly changes the system for corporate use of `Linux Mint`, namely `XRDP (x11vnc)` and `openssh-server` are installed and configured, as well as packages for working with the `FreeIPA` domain, `Microsoft Base` fonts, `Libre Office` office suite, OnlyOffice (In the future)`.
+What has been changed?
+* `XRDP` uses `x11vnc` to display and work with the local session, x11vnc itself listens only to `localhost`, when trying to connect and/or disconnect, all sessions will be blocked - this is the responsibility of the `x11vnc-connection-watcher.sh` script and the `systemd` service `x11vnc-connection-watcher.service`, which checks port 3389 every second and, if a connection is detected, blocks all sessions and raises `x11vnc-temp.service`, which is responsible for the operation of `x11vnc` itself. The `x11vnc` arguments prohibit the two-way buffer and any other clipboard for security purposes (Can be fixed by editing the `x11vnc-temp.service` service). The local password `/etc/vncpasswd` is generally not particularly important when the `KDE`/`SDDM` shell itself protects the session. * An `OpenSSH` server is configured on port `22522`, with password and `root` access disabled, that is, to use the `OpenSSH` server you need to either install a private key for the system user `demon.system` (It can also be used, for example, for `Ansible`), or change the configuration to allow passwords.
+* A system user `demon.system` is added, which does not have a password, but also does not have the ability to log in with a password, since it is disabled.
+* `ipa-client-add-user-sudo.service` is configured with the execution of the `ipa-client-add-user-sudo.sh` script, which you can read more about in a separate section.
 
-# Сервис ipa-client-add-user-sudo.service
-Этот небольшой скрипт нужен как дополнение к настройке FreeIPA на Linux Mint, Ubuntu. Debian и т. д., а именно... Берет пользователей из группы `ipa_sudo` (можно перенастроить) и добавляет их в локальную группу пользователей `sudo`.
-Это нужно для того, чтобы администраторы из домена `IPA` были видны в графической среде, т.к. часто такие оболочки, как `KDE`, `Cinnamon` и им подобные отображают пользователей только из группы `/etc/group`.
-Не знаю, кому это пригодится... Но если вам нужно подготовить чистую систему для домена IPA - вперед :)
-~~В скрипте 5 переменных, скорее всего Вам понадобятся только `nameIPAGroup` и `nameDefaultUser`.
-Вставьте сюда имя группы пользователей в домене IPA, которая должна быть sudo и локальной для системы, а также вставьте имя локального пользователя в `nameDefaultUser`
-В противном случае, это скрипт для `автонастройки` системы в `среде IPA`. Я думаю, скрипт можно легко переделать для других менеджеров пакетов, не только `apt`...~~~
+# Service ipa-client-add-user-sudo.service
+This small script is needed as an addition to configuring FreeIPA on Linux Mint, Ubuntu. Debian etc., namely... Takes users from the `ipa_sudo` group (can be reconfigured) and adds them to the local `sudo` user group.
+This is necessary so that administrators from the `IPA` domain are visible in the graphical environment, since often such shells as `KDE`, `Cinnamon` and the like display users only from the `/etc/group` group.
+I don't know who will find this useful... But if you need to prepare a clean system for the IPA domain - go ahead :)
+~~There are 5 variables in the script, most likely you will only need `nameIPAGroup` and `nameDefaultUser`.
+Insert here the name of the user group in the IPA domain, which should be sudo and local for the system, and also insert the name of the local user in `nameDefaultUser`
+Otherwise, this is a script for `auto-configuring` the system in the `IPA environment`. I think the script can be easily adapted for other package managers, not only `apt`...~~~
 
-# Как использовать
-~~Поместите файл куда угодно, но лучше в `/root`, затем отредактируйте файл, а именно укажите `группу пользователей из домена IPA, которая будет иметь права sudo в системе`, а также измените переменную `$nameDefaultUser` на вашего локального пользователя... И запустите файл из sudo.
-Ах да, и не забудьте записать: `hostnamectl set-hostname client.domain.name` перед запуском скрипта.~~
+# How to use
+~~Place the file anywhere, but preferably in `/root`, then edit the file, namely specify `user group from the IPA domain that will have sudo rights in the system`, and also change the variable `$nameDefaultUser` to your local user... And run the file from sudo.
+Oh yeah, and don't forget to write: `hostnamectl set-hostname client.domain.name` before running the script.~~
 
-# О скрипте
-Если вы хотите узнать больше о скрипте, то он работает следующим образом: </br>
-- Сначала обновляется система и устанавливаются необходимые пакеты.
-- Затем создается sh-файл, который будет выполняться будущей `service` и находится по пути: `/usr/local/bin/ipa-client-add-user-sudo.sh` Путь также описывается в переменной: `fileNameBash`
-- Далее создается сам файл `service`, который будет выполняться только при запуске системы или при ручном вызове. Файл находится по пути: `/etc/systemd/system/ipa-client-add-user-sudo.service` Путь также описывается в переменной: `fileNameService`
-- Затем `service` `unmasked`, `enabled` и `started`, а после выполнения или сбоя службы отображается ее `status`.
-- Вот и все...
-## Теперь сам файл ipa-client-add-user-sudo.sh:
-- Сначала он определяет, какие пользователи находятся в группе `sudo` и `$nameIPAGroup`.
-- Затем идет 10-секундная задержка на тайм-аут запроса.
-- Затем в первом цикле удаляются `ВСЕ` пользователи из группы sudo.
-- Далее снова добавляется системный пользователь в группу `sudo` (В моем случае это sysadm, в вашем случае это локальный пользователь. Будьте внимательны на этом этапе и желательно указать пользователя самостоятельно в переменной `$nameDefaultUser`!).
-- Теперь, наконец, во втором цикле все пользователи, найденные в группе `ipa_sudo` (можно изменить), добавляются в локальную `sudo` и скрипт завершается.
+# About the script
+If you want to know more about the script, it works as follows: </br>
+- First, the system is updated and the necessary packages are installed.
+- Then, a sh file is created, which will be executed by the future `service` and is located at: `/usr/local/bin/ipa-client-add-user-sudo.sh` The path is also described in the variable: `fileNameBash`
+- Next, the `service` file itself is created, which will be executed only at system startup or when manually called. The file is located at: `/etc/systemd/system/ipa-client-add-user-sudo.service` The path is also described in the variable: `fileNameService`
+- Then, the `service` is `unmasked`, `enabled` and `started`, and after the service is executed or fails, its `status` is displayed.
+- That's it...
+## Now the ipa-client-add-user-sudo.sh file itself:
+- First it determines which users are in the `sudo` group and `$nameIPAGroup`.
+- Then there is a 10 second delay for the request timeout.
+- Then in the first loop `ALL` users from the sudo group are removed.
+- Then the system user is added back to the `sudo` group (In my case it is sysadm, in your case it is a local user. Be careful at this stage and it is advisable to specify the user yourself in the `$nameDefaultUser` variable!).
+- Now finally in the second loop all users found in the `ipa_sudo` group (can be changed) are added to the local `sudo` and the script ends.
 </br>
 </br>
 </br>
 </br>
-P.S.> Я улучшу сценарий позже... Правда... Правда :>
+P.S.> I will improve the script later... Really... Really :>
