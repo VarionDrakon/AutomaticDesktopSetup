@@ -1,31 +1,42 @@
-# FreeIPAClientAddUserSudo
-This small script is needed as an addition to configuring FreeIPA on Linux Mint, Ubuntu. Debian, and so on, namely... Takes users from the `ipa_sudo` group (can be reconfigured) and adds them to the local `sudo` user group.
-This is necessary so that administrators from the `IPA` domain are visible in the graphical environment, because often shells such as `KDE`, `Cinnamon` and the like display users only from the `/etc/group` group.
-I don't know who will find this useful... But if you need to prepare a clean system for the IPA domain - go ahead :)
-There are 5 variables in the script, you will most likely only need `nameIPAGroup` and `nameDefaultUser`.
-Insert here the name of the user group in the IPA domain, which should be sudo and local to the system, and also insert the name of the local user in `nameDefaultUser`</br>
-</br>Otherwise, this is a script for `auto-configuring` the system in the `IPA environment`. I think the script can be easily remade for other package managers, not just `apt`...</br>
+# AutomaticDesktopSetup (Home)
+Этот небольшой скрипт для того, чтобы настроить домашний ПК на системе `Linux Mint` на окружение рабочего стола `KDE` с одной из достаточно хороших графических тем. Внутри скрипта есть две переменные - `INSTALL_PKGS` и `REMOVE_PKGS`. Они необходимы для выборки того, что будет установлено в системе, а что будет удаленно. Сильных изменений в систему, кроме графических, не привносит, а только лишь помогает настроить чистую систему с нуля.
 
-# How to use
-Place the file wherever you like, but preferably in `/root`, then edit the file, namely specify `user group from the IPA domain that will have sudo rights in the system`, and also change the variable `$nameDefaultUser` to your local user... And run the file from sudo.</br>
-</br>
-Oh yeah, and don't forget to write it down: `hostnamectl set-hostname client.domain.name` before running the script.
+# AutomaticDesktopSetup (Corporate/Business)
+Всё тоже самое, что и для `Home`, только этот скрипт уже значительнее меняет систему для корпоративного использования `Linux Mint`, а именно устанавливается и настраивается `XRDP (x11vnc)` и `openssh-server, так же устанавливаются пакеты для работы с доменом `FreeIPA`, шрифты `Microsoft Base`, офисный пакет `Libre Office, OnlyOffice (В будущем)`.
+Что изменено?
+* `XRDP` использует `x11vnc` для отображения и работы с локальным сеансом, сам же x11vnc слушает только `localhost`, при попытке подсоединиться и/или отсоединиться будет происходить блокировка всех сессий - за это отвечает скрипт `x11vnc-connection-watcher.sh` и сервис `systemd` `x11vnc-connection-watcher.service`, который каждую секунду проверяет порт 3389 и в случае обнаружения подключения блокирует все сесси и поднимает `x11vnc-temp.service`
+и который отвечает за работу самого `x11vnc`. Аргументы `x11vnc` запрещают двухсторонний буфер и какой-либо иной буфер обмена в целях безопасности (Можно исправить, поправив сервис `x11vnc-temp.service`). Локальный пароль `/etc/vncpasswd` в целом не особо важен, когда сама оболочка `KDE`/`SDDM` защищает сессию.
+* Настроен `OpenSSH` сервер на порту `22522`, у которого отключён доступ по паролю и `root`, то есть, для использования `OpenSSH` сервера необходимо Вам либо установить приватный ключ для системного пользователя `demon.system` (Он же может использоваться, например для `Ansible`), либо изменить конфигурацию на разрешение паролей.
+* Добавлен системный пользователь `demon.system` у которого нет пароля, но и так же нет возможности входа по паролю, так как отключена.
+* Настроен `ipa-client-add-user-sudo.service` с выполенением скрипта `ipa-client-add-user-sudo.sh`, про который можно подробнее почитать в отдельном пункте.
 
-# About script
-If you want to know more about the script, it works as follows: </br>
-- First, the system is updated and the necessary packages are installed (Tree is not required).
-- Then a sh file is created that will be executed by the future `service` and is located along the path: `/usr/local/bin/ipa-client-add-user-sudo.sh` The path is also described in a variable: `fileNameBash`
-- Next, the `service` file itself is created, which will only be executed when the system starts or when manually called. The file is located at the path: `/etc/systemd/system/ipa-client-add-user-sudo.service` The path is also described in a variable: `fileNameService`
-- Then the `service` is `unmasked`, `enabled` and `started`, and after the service is executed or crashed, its `status` is displayed.
-- That's pretty much it...
-## Now the file itself ipa-client-add-user-sudo.sh:
-  - First, it determines which users are in the `sudo` group and `$nameIPAGroup`.
-  - Then there is a 10 second delay for the request timeout.
-  - Then in the first cycle `ALL` users from the sudo group are removed.
-  - Next, a system user is added to group `sudo` again (In my case, it is sysadm, in your case, it is a local user. Be careful at this point and it is advisable to specify the user yourself in the `$nameDefaultUser` variable!).
-  - Now, finally, in the second cycle, all users found in the `ipa_sudo` group (can be changed) are added to the local `sudo` and the script ends.
+# Сервис ipa-client-add-user-sudo.service
+Этот небольшой скрипт нужен как дополнение к настройке FreeIPA на Linux Mint, Ubuntu. Debian и т. д., а именно... Берет пользователей из группы `ipa_sudo` (можно перенастроить) и добавляет их в локальную группу пользователей `sudo`.
+Это нужно для того, чтобы администраторы из домена `IPA` были видны в графической среде, т.к. часто такие оболочки, как `KDE`, `Cinnamon` и им подобные отображают пользователей только из группы `/etc/group`.
+Не знаю, кому это пригодится... Но если вам нужно подготовить чистую систему для домена IPA - вперед :)
+~~В скрипте 5 переменных, скорее всего Вам понадобятся только `nameIPAGroup` и `nameDefaultUser`.
+Вставьте сюда имя группы пользователей в домене IPA, которая должна быть sudo и локальной для системы, а также вставьте имя локального пользователя в `nameDefaultUser`
+В противном случае, это скрипт для `автонастройки` системы в `среде IPA`. Я думаю, скрипт можно легко переделать для других менеджеров пакетов, не только `apt`...~~~
+
+# Как использовать
+~~Поместите файл куда угодно, но лучше в `/root`, затем отредактируйте файл, а именно укажите `группу пользователей из домена IPA, которая будет иметь права sudo в системе`, а также измените переменную `$nameDefaultUser` на вашего локального пользователя... И запустите файл из sudo.
+Ах да, и не забудьте записать: `hostnamectl set-hostname client.domain.name` перед запуском скрипта.~~
+
+# О скрипте
+Если вы хотите узнать больше о скрипте, то он работает следующим образом: </br>
+- Сначала обновляется система и устанавливаются необходимые пакеты.
+- Затем создается sh-файл, который будет выполняться будущей `service` и находится по пути: `/usr/local/bin/ipa-client-add-user-sudo.sh` Путь также описывается в переменной: `fileNameBash`
+- Далее создается сам файл `service`, который будет выполняться только при запуске системы или при ручном вызове. Файл находится по пути: `/etc/systemd/system/ipa-client-add-user-sudo.service` Путь также описывается в переменной: `fileNameService`
+- Затем `service` `unmasked`, `enabled` и `started`, а после выполнения или сбоя службы отображается ее `status`.
+- Вот и все...
+## Теперь сам файл ipa-client-add-user-sudo.sh:
+- Сначала он определяет, какие пользователи находятся в группе `sudo` и `$nameIPAGroup`.
+- Затем идет 10-секундная задержка на тайм-аут запроса.
+- Затем в первом цикле удаляются `ВСЕ` пользователи из группы sudo.
+- Далее снова добавляется системный пользователь в группу `sudo` (В моем случае это sysadm, в вашем случае это локальный пользователь. Будьте внимательны на этом этапе и желательно указать пользователя самостоятельно в переменной `$nameDefaultUser`!).
+- Теперь, наконец, во втором цикле все пользователи, найденные в группе `ipa_sudo` (можно изменить), добавляются в локальную `sudo` и скрипт завершается.
 </br>
 </br>
 </br>
 </br>
-P.S.> I'll improve the script later... True... True :>
+P.S.> Я улучшу сценарий позже... Правда... Правда :>
