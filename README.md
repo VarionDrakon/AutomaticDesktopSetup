@@ -19,6 +19,9 @@ Otherwise, this is a script for `auto-configuring` the system in the `IPA enviro
 # How to use
 ~~Place the file anywhere, but preferably in `/root`, then edit the file, namely specify `user group from the IPA domain that will have sudo rights in the system`, and also change the variable `$nameDefaultUser` to your local user... And run the file from sudo.
 Oh yeah, and don't forget to write: `hostnamectl set-hostname client.domain.name` before running the script.~~
+<br>
+You need to take the script version from the `Environments` folder, then run the script as `root` and specify the archive located next to the script as the first argument (Required), then wait a while and follow the instructions on the screen.
+If you are asked for `lightDM` or `SDDM`, it is recommended to choose `SDDM`, since it works best with `KDE` and the script is oriented towards this display manager.
 
 # About the script
 If you want to know more about the script, it works as follows: </br>
