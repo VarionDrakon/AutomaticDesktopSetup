@@ -1,7 +1,7 @@
 # AutomaticDesktopSetup (Home)
 This small script is for setting up a home PC on the Linux Mint system to the KDE desktop environment with one of the good graphical themes. There are two variables inside the script - INSTALL_PKGS and REMOVE_PKGS. They are needed to select what will be installed in the system and what will be removed. It does not make any significant changes to the system, except for graphical ones, but only helps to set up a clean system from scratch.
 
-# AutomaticDesktopSetup (Corporate/Business)
+# AutomaticDesktopSetup (Enterprise)
 All the same as for `Home`, only this script significantly changes the system for corporate use of `Linux Mint`, namely `XRDP (x11vnc)` and `openssh-server` are installed and configured, as well as packages for working with the `FreeIPA` domain, `Microsoft Base` fonts, `Libre Office` office suite, OnlyOffice (In the future)`.
 What has been changed?
 * `XRDP` uses `x11vnc` to display and work with the local session, x11vnc itself listens only to `localhost`, when trying to connect and/or disconnect, all sessions will be blocked - this is the responsibility of the `x11vnc-connection-watcher.sh` script and the `systemd` service `x11vnc-connection-watcher.service`, which checks port 3389 every second and, if a connection is detected, blocks all sessions and raises `x11vnc-temp.service`, which is responsible for the operation of `x11vnc` itself. The `x11vnc` arguments prohibit the two-way buffer and any other clipboard for security purposes (Can be fixed by editing the `x11vnc-temp.service` service). The local password `/etc/vncpasswd` is generally not particularly important when the `KDE`/`SDDM` shell itself protects the session. 
