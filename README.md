@@ -32,7 +32,7 @@ If you want to know more about the script, it works like this: </br>
 - [STEP 0.1] Checks for running as `root`.
 - [STEP 0.2] Checks if the archive was passed as the first argument.
 - [STEP 1] Asks the user for permission to continue the installation.
-- [STEP 2.0] Checks the mod version using the variable from the `/etc/os-release` file. If the version is outdated or the variable is missing, then with the user's permission, the file will be modified during archive unpacking.
+- [STEP 2.0] Checks the mod version using the variable `VERSION_MOD="X.X"` from the `/etc/os-release` file. If the version is outdated or the variable is missing, then with the user's permission, the file will be modified during archive unpacking.
 - [STEP 2.1] Checks for an internet connection to `https://google.com` via `curl`. If there is no internet connection, no packages will be installed, but existing ones will be removed, which will also be at the user's discretion. To avoid problems, an internet connection is required.
 - [STEP 3.0] Starts unpacking the archive using `tar -xzvf "$ARCHIVE" -C "$TEMP_DIR"`.
 - [STEP 3.1] Installs system updates.
