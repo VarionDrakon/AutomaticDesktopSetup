@@ -25,13 +25,33 @@ You need to take the script version from the `Environments` folder, then run the
 
 If you are asked for `lightDM` or `SDDM`, it is recommended to choose `SDDM`, since it works best with `KDE` and the script is oriented towards this display manager.
 
-# About the script
-~~If you want to know more about the script, it works as follows:~~
-- ~~First, the system is updated and the necessary packages are installed.~~
-- ~~Then, a sh file is created, which will be executed by the future `service` and is located at: `/usr/local/bin/ipa-client-add-user-sudo.sh` The path is also described in the variable: `fileNameBash`~~
-- ~~Next, the `service` file itself is created, which will be executed only at system startup or when manually called. The file is located at: `/etc/systemd/system/ipa-client-add-user-sudo.service` The path is also described in the variable: `fileNameService`~~
-- ~~Then, the `service` is `unmasked`, `enabled` and `started`, and after the service is executed or fails, its `status` is displayed.~~
-- ~~That's it...~~
+# About the script (Enterprise)
+If you want to know more about the script, it works like this: </br>
+- [STEP 0.0] Creates a temporary folder `TEMP_DIR=$(mktemp -d)`.
+- [STEP 0.0] Then displays a notification.
+- [STEP 0.1] Checks for running as `root`.
+- [STEP 0.2] Checks if the archive was passed as the first argument.
+- [STEP 1] Asks the user for permission to continue the installation.
+- [STEP 2.0] Checks the mod version using the variable from the `/etc/os-release` file. If the version is outdated or the variable is missing, then with the user's permission, the file will be modified during archive unpacking.
+- [STEP 2.1] Checks for an internet connection to `https://google.com` via `curl`. If there is no internet connection, no packages will be installed, but existing ones will be removed, which will also be at the user's discretion. To avoid problems, an internet connection is required.
+- [STEP 3.0] Starts unpacking the archive using `tar -xzvf "$ARCHIVE" -C "$TEMP_DIR"`.
+- [STEP 3.1] Installs system updates.
+- [STEP 3.2] Installs packages according to the list in `$TEMP_DIR/to_install_packages.txt`.
+- [STEP 3.3] Then completely cleans up packages from the list in `$TEMP_DIR/to_remove_packages.txt`.
+- [STEP 3.4] The final step is removing packages using `autoremove`.
+- [STEP 3.5] And cleans up local repositories using `apt clean`.
+- [STEP 4.0.*] Copying files from `"$TEMP_DIR/etc/"*` and `"$TEMP_DIR/usr/"*` directories to `/etc/` and `/usr/` respectively.
+- [STEP 4.1.*] Restarting the systemd daemon, and then enabling the services - `x11vnc-temp.service`, `x11vnc-connection-watcher.service`, `ipa-client-add-user-sudo.service`.
+- [STEP 4.2.*] Setting `755` and `+x` permissions for scripts in the path `/usr/local/bin/ipa-client-add-user-sudo.sh` and `/usr/local/bin/x11vnc-connection-watcher.sh`.
+- [STEP 4.3] Delete archive files from `rm -rf "$TEMP_DIR"`.
+- [STEP 4.4] Place password for `x11vnc` in `/etc/vncpasswd`.
+- [STEP 4.5] Create new user `demon.system` without password login option.
+- [STEP 4.6.*] Ask user to specify PC's full domain name, then check if entered name is correct and display specified name.
+- [STEP 4.7.*] At user's discretion, it is possible to immediately enter PC into IPA domain and in case of failure, choose to skip installation.
+- [STEP 4.8.*] Update all existing users in `/home` from `/etc/skel`. First, registered users are searched for in the system, then files from `/etc/skel` are forcibly overwritten by users' home files, and a new directory `.custom_config` is created for custom program configurations. The last step for users is to correct file and directory permissions based on the folder name - `chown -R "$username:$username" "$user_home_dir"` 
+- [STEP FIN] It remains to reboot the PC to apply all changes to the system.
+
+
 ## Now the ipa-client-add-user-sudo.sh file itself:
 - First it determines which users are in the `sudo` group and `$nameIPAGroup`.
 - Then there is a 10 second delay for the request timeout.
