@@ -21,7 +21,8 @@ What has been changed?
 * `x11vnc-connection-watcher.sh` - Located at `/usr/local/bin/x11vnc-connection-watcher.sh` and listens to port 3389 for incoming connections every second and if attempts to connect to the PC via this port are detected, all available sessions are blocked via `loginctl lock-sessions` so that the connected client sees the local session in a blocked state and is required to enter the password and login for this session, approximately the same as with a standard connection via `xrdp`, only unlike the standard method, new empty sessions are not created here.
 
 # How to use
-First, you need to select the script version (Home/Enterprise) in the repository, then save the `setup.*.sh` file and the archive located nearby, you can save it with any name, then in the console from the `sudo` group, run the script approximately as follows - `sudo bash image_unpacking_archive.sh assembling_archive_20250520.tar.gz`, that is, specify the archive from which the files will be unpacked as the first argument, and then follow the instructions from the script. <br>
+First, you need to select the script version (Home/Enterprise) in the repository, then save the `setup.*.sh` file and the archive located nearby, you can save it with any name, then in the console from the `sudo` group, run the script approximately as follows - `sudo bash image_unpacking_archive.sh assembling_archive_20250520.tar.gz`, that is, specify the archive from which the files will be unpacked as the first argument, and then follow the instructions from the script. 
+
 Notes:
 If you are asked for `lightDM` or `SDDM`, it is recommended to choose `SDDM`, since it works best with `KDE` and the script is oriented towards this display manager.
 If `Microsoft` fonts ask you for `EULA`, then accepting/not accepting the agreement is up to you.
