@@ -53,14 +53,6 @@ If you want to know more about the script, it works like this: </br>
 - [STEP 4.7.*] At user's discretion, it is possible to immediately enter PC into IPA domain and in case of failure, choose to skip installation.
 - [STEP 4.8.*] Update all existing users in `/home` from `/etc/skel`. First, registered users are searched for in the system, then files from `/etc/skel` are forcibly overwritten by users' home files, and a new directory `.custom_config` is created for custom program configurations. The last step for users is to correct file and directory permissions based on the folder name - `chown -R "$username:$username" "$user_home_dir"` 
 - [STEP FIN] It remains to reboot the PC to apply all changes to the system.
-
-
-## Now the ipa-client-add-user-sudo.sh file itself:
-- First it determines which users are in the `sudo` group and `$nameIPAGroup`.
-- Then there is a 10 second delay for the request timeout.
-- Then in the first loop `ALL` users from the sudo group are removed.
-- Then the system user is added back to the `sudo` group (In my case it is sysadm, in your case it is a local user. Be careful at this stage and it is advisable to specify the user yourself in the `$nameDefaultUser` variable!).
-- Now finally in the second loop all users found in the `ipa_sudo` group (can be changed) are added to the local `sudo` and the script ends.
 </br>
 </br>
 </br>
