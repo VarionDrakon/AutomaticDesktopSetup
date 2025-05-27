@@ -21,12 +21,11 @@ What has been changed?
 * `x11vnc-connection-watcher.sh` - Located at `/usr/local/bin/x11vnc-connection-watcher.sh` and listens to port 3389 for incoming connections every second and if attempts to connect to the PC via this port are detected, all available sessions are blocked via `loginctl lock-sessions` so that the connected client sees the local session in a blocked state and is required to enter the password and login for this session, approximately the same as with a standard connection via `xrdp`, only unlike the standard method, new empty sessions are not created here.
 
 # How to use
-~~Place the file anywhere, but preferably in `/root`, then edit the file, namely specify `user group from the IPA domain that will have sudo rights in the system`, and also change the variable `$nameDefaultUser` to your local user... And run the file from sudo.
-Oh yeah, and don't forget to write: `hostnamectl set-hostname client.domain.name` before running the script.~~
-
-You need to take the script version from the `Environments` folder, then run the script as `root` and specify the archive located next to the script as the first argument (Required), then wait a while and follow the instructions on the screen.
-
+First, you need to select the script version (Home/Enterprise) in the repository, then save the `setup.*.sh` file and the archive located nearby, you can save it with any name, then in the console from the `sudo` group, run the script approximately as follows - `sudo bash image_unpacking_archive.sh assembling_archive_20250520.tar.gz`, that is, specify the archive from which the files will be unpacked as the first argument, and then follow the instructions from the script.
+Notes:
 If you are asked for `lightDM` or `SDDM`, it is recommended to choose `SDDM`, since it works best with `KDE` and the script is oriented towards this display manager.
+If `Microsoft` fonts ask you for `EULA`, then accepting/not accepting the agreement is up to you.
+If asked for the `Kerberos X` realm, leave it blank as this is only useful for the domain that will be automatically configured later.
 
 # About the script (Enterprise)
 If you want to know more about the script, it works like this: </br>
