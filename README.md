@@ -23,7 +23,7 @@ What has been changed?
 # How to use
 First, you need to select the script version (Home/Enterprise) in the repository, then save the `setup.*.sh` file and the archive located nearby, you can save it with any name, then in the console from the `sudo` group, run the script approximately as follows - `sudo bash image_unpacking_archive.sh assembling_archive_20250520.tar.gz`, that is, specify the archive from which the files will be unpacked as the first argument, and then follow the instructions from the script. 
 
-Notes:
+Notes: <br>
 If you are asked for `lightDM` or `SDDM`, it is recommended to choose `SDDM`, since it works best with `KDE` and the script is oriented towards this display manager. <br>
 If `Microsoft` fonts ask you for `EULA`, then accepting/not accepting the agreement is up to you. <br>
 If asked for the `Kerberos X` realm, leave it blank as this is only useful for the domain that will be automatically configured later. <br>
